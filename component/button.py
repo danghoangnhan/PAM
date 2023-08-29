@@ -5,8 +5,22 @@ class ButtonElement:
         self.button = visual.Rect(win, width=width, height=height, fillColor=color, pos=pos)
         self.text = visual.TextStim(win, text=text, pos=pos)
         self.action = action
+        self.states = {
+                        'unpress': {
+                            'button_color': 'navy',
+                            'text_color': 'white'
+                        },
+                        'press': {
+                            'button_color': 'orange',
+                            'text_color': 'black'
+                        }
+                    }        
+        self.state = 'unpress'  # Initial state is 'unpress'
 
     def draw(self):
+        state_data = self.states[self.state]
+        self.button.fillColor = state_data['button_color']
+        self.text.setColor(state_data['text_color'])
         self.button.draw()
         self.text.draw()
 
@@ -42,5 +56,11 @@ class ButtonList:
     def action(self,mouse):
         for element_id,element in enumerate(self.button_elements):
             if element.containMouse(mouse):
-                element.action(element_id)
+                return element.action(element_id)
+            
+    def updateState(self,buttonId):
+        for element_id,element in enumerate(self.button_elements):
+            element.state = 'unpress'
+            if element_id==buttonId:
+                element.state = 'press'
 

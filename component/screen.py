@@ -133,7 +133,11 @@ class TestScreen(BaseScreen):
         else:
             self.add_element(self.nextButton)
             self.add_element(self.previousButton)
-    
+        
+        current_question = self.answerList[self.current_index]
+        self.bofomo_consonants_list.updateState(current_question.get_answer())
+        self.similarities_list.updateState(current_question.get_similarity())
+
     def submit_test(self):
         return EndScreen(self.win)
     
@@ -145,7 +149,10 @@ class TestScreen(BaseScreen):
         # This function is called when a BofoMo consonant button is clicked.
         # 'button_index' is the index of the button that was clicked.
         selected_consonant = pofomopo_consonants[button_index]
+        current_question = self.answerList[self.current_index]
+        current_question.set_answer(button_index)
         print(f"BofoMo consonant button clicked: {selected_consonant}")
+        self.bofomo_consonants_list.updateState(current_question.get_answer())
         return self
 
     # Action for similarities
@@ -153,5 +160,8 @@ class TestScreen(BaseScreen):
         # This function is called when a similarity button is clicked.
         # 'button_index' is the index of the button that was clicked.
         selected_similarity = similarity_list[button_index]
+        current_question = self.answerList[self.current_index]
+        current_question.set_similarity(button_index)
         print(f"Similarity button clicked: {selected_similarity}")
+        self.similarities_list.updateState(current_question.get_similarity())
         return self

@@ -1,8 +1,8 @@
 class Answer:
-    def __init__(self, question):
+    def __init__(self, question,similarity=-1,answer=-1):
         self.question = question
-        self.answer = None
-        self.similarity = None
+        self.answer = answer
+        self.similarity = similarity
 
     # Setter method for 'answer'
     def set_answer(self, answer):
