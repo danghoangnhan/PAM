@@ -1,6 +1,7 @@
-from component.button import ButtonElement
+from component.button import ButtonElement, ButtonList
 from psychopy import visual, core, event
 from component.screen import StartScreen
+
 
 class Game:
     def __init__(self):
@@ -15,15 +16,19 @@ class Game:
                 # Check for mouse clicks
                 if self.mouse.getPressed()[0]:  # 0 represents the left mouse button
                     for element in self.current_screen.elements:
-                        if isinstance(element, ButtonElement) and element.button.contains(self.mouse):
+                        if isinstance(element, ButtonElement) and element.containMouse(self.mouse):
                             if element.action:
                                 self.setScreen(element.action())
+                                core.wait(0.2)
+                        if isinstance(element, ButtonList) and element.containMouse(self.mouse):
+                            if element.action:
+                                self.setScreen(element.action(mouse=self.mouse))
+                                core.wait(0.2)
         if self.current_screen==None:
             print("screen is none")
-        # Cleanup
         self.win.close()
         core.quit()
-    
+
     def setScreen(self,screen):
         self.current_screen = screen
 
