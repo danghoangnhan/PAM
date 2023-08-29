@@ -1,6 +1,6 @@
 from component.button import ButtonElement
-from component.screen import StartScreen
 from psychopy import visual, core, event
+from component.screen.start import StartScreen
 
 class Game:
     def __init__(self):
@@ -9,7 +9,6 @@ class Game:
         self.mouse = event.Mouse()
     def start(self):
         while self.current_screen is not None:
-                print(self.current_screen)
                 self.current_screen.draw()
                 self.win.flip()
 
