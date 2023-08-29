@@ -1,6 +1,6 @@
-from button import ButtonElement
-from text import TextElement
-
+from component.button import ButtonElement
+from component.text import TextElement
+from config.font import color_dict
 
 class Screen:
     def __init__(self, win):
@@ -32,7 +32,7 @@ class TestScreen(Screen):
         self.add_element(TextElement(win, "Audio Test List", pos=(0, 0)))
         # Add audio stimuli and answer buttons here
         # Example:
-        # self.add_element(ButtonElement(win, "Play Sound", pos=(-0.4, 0.2), width=0.2, height=0.1, color="blue", action=self.play_sound))
+        self.add_element(ButtonElement(win, "Play Sound", pos=(-0.4, 0.2), width=0.2, height=0.1, color="blue", action=self.play_sound))
 
     def play_sound(self):
         # Add logic to play audio here

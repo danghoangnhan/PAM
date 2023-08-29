@@ -2,27 +2,32 @@ from component.button import ButtonElement
 from component.screen import StartScreen
 from psychopy import visual, core, event
 
+class Game:
+    def __init__(self):
+        self.win  = visual.Window([800, 600], color="white")
+        self.current_screen = StartScreen(self.win)
+        self.mouse = event.Mouse()
+    def start(self):
+        while self.current_screen is not None:
+                print(self.current_screen)
+                self.current_screen.draw()
+                self.win.flip()
 
-# Create a window
-win = visual.Window([800, 600], color="white")
-
-# Create and initialize the first screen
-current_screen = StartScreen(win)
-
-while current_screen is not None:
-    current_screen.draw()
-    win.flip()
-    response = event.waitKeys()
+                # Check for mouse clicks
+                if self.mouse.getPressed()[0]:  # 0 represents the left mouse button
+                    for element in self.current_screen.elements:
+                        if isinstance(element, ButtonElement) and element.button.contains(self.mouse):
+                            if element.action:
+                                self.setScreen(element.action())
+        # Cleanup
+        self.win.close()
+        core.quit()
     
-    if response and current_screen.elements:
-        for element in current_screen.elements:
-            if isinstance(element, ButtonElement) and 'space' in response:
-                if element.action:
-                    current_screen = element.action()
+    def setScreen(self,screen):
+        self.current_screen = screen
 
-# Cleanup
-win.close()
-core.quit()
+game = Game()
+game.start()
 
 
 
