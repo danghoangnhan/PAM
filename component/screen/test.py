@@ -48,7 +48,6 @@ class TestScreen(BaseScreen):
 
     def play_sound(self):
         if self.currentAnswer is not None:
-            print(self.currentAnswer.get_question())
             play(self.currentAnswer.get_question())
 
     def set_currentAnswer(self, answer):
