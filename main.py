@@ -1,6 +1,6 @@
 from component.button import ButtonElement
 from psychopy import visual, core, event
-from component.screen.start import StartScreen
+from component.screen import StartScreen
 
 class Game:
     def __init__(self):
@@ -18,6 +18,8 @@ class Game:
                         if isinstance(element, ButtonElement) and element.button.contains(self.mouse):
                             if element.action:
                                 self.setScreen(element.action())
+        if self.current_screen==None:
+            print("screen is none")
         # Cleanup
         self.win.close()
         core.quit()
