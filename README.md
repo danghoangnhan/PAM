@@ -17,21 +17,29 @@ QuizzApp is a Python application for conducting quizzes or tests with audio ques
    git clone https://github.com/yourusername/QuizzApp.git
    cd QuizzApp
 2. Create a Conda environment from the env.yml file:
+   
    ```bash
    conda env create -f environment.yml
 3. Activate the Conda environment:
+   
    ```bash
    conda activate quizzapp
+
 ## Usage
+
 To run the QuizzApp, use the following command:
 
-    ```bash
-    python main.py
+   ```bash
+   python main.py
+   ```
+
 ## Build Executable
+
 You can build an executable for QuizzApp using cx_Freeze. Run the following command:
 
-    ```bash
-    python setup.py build
+   ```bash
+   python setup.py build
+   ```
 This will create an executable in the build directory.
 
 
