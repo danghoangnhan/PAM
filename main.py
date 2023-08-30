@@ -5,7 +5,7 @@ import pyglet
 
 class Game:
     def __init__(self):
-        self.win  = visual.Window([800, 600], color="white")
+        self.win  = visual.Window([1200, 800], color="white")
         self.current_screen = StartScreen(self.win)
         self.mouse = event.Mouse()
 

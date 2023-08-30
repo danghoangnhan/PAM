@@ -12,7 +12,7 @@ class ButtonElement:
         self.action = action
         self.states = {
                         'unpress': {
-                            'button_color': 'navy',
+                            'button_color': color,
                             'text_color': 'white'
                         },
                         'press': {

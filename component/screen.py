@@ -30,8 +30,8 @@ class EndScreen(BaseScreen):
     def __init__(self, win):
         super().__init__(win)
         self.add_element(TextElement(win, "Thank you for participating!", pos=(0, 0),color=color_dict["black"]))
-        self.add_element(ButtonElement(win, "Replay", pos=(0, -0.2), width=0.2, height=0.1, color="green", action=self.replay))
-        self.add_element(ButtonElement(win, "Quit", pos=(0, -0.4), width=0.2, height=0.1, color="red", action=self.quit))
+        self.add_element(ButtonElement(win, "Replay", pos=(0, -0.2), width=0.3, height=0.2, color="green", action=self.replay))
+        self.add_element(ButtonElement(win, "Quit", pos=(0, -0.5), width=0.3, height=0.2, color="red", action=self.quit))
 
     def replay(self):
         return StartScreen(self.win)
@@ -56,15 +56,15 @@ class TestScreen(BaseScreen):
         self.answerList  = self.get_m4a_files(audio_dir)
         self.current_index = 0
         # List of BofoMo consonants
-        self.playSoundButton = ButtonElement(win, "Play Sound", pos=(-0.2, 0.2), width=0.2, height=0.1, color="blue", action=self.play_sound)
-        self.previousButton  = ButtonElement(win, "Previous", pos=(0.5, -0.8), width=0.3, height=0.2, color="blue", action=self.previous_question)
+        self.playSoundButton = ButtonElement(win, "Play Sound", pos=(-0.4, 0.5), width=0.4, height=0.2, color="blue", action=self.play_sound)
+        self.previousButton  = ButtonElement(win, "Previous", pos=(0.55, -0.8), width=0.3, height=0.2, color="blue", action=self.previous_question)
         self.nextButton      = ButtonElement(win, "Next", pos=(0.85, -0.8), width=0.2, height=0.2, color="blue", action=self.next_question)
         self.submitButton    = ButtonElement(win, "Submit", pos=(0.7, -0.5), width=0.3, height=0.2, color="blue", action= self.submit_test)
         self.progress        = TextElement(win, "Test Number:{}/{}".format(self.current_index+1,len(self.answerList)), pos=(0.7, 0.9),color=color_dict["black"])
         self.bofomo_consonants_list  = ButtonList(
                                             win=win,
                                             textList=pofomopo_consonants,
-                                            pos=(-0.3, -0.45),  # Grid position
+                                            pos=(-0.32, -0.45),  # Grid position
                                             width=0.25,   # Button width
                                             height=0.2,  # Button height
                                             color="blue",  # Button color
@@ -77,15 +77,15 @@ class TestScreen(BaseScreen):
         self.similarities_list  = ButtonList(
                                             win=win,
                                             textList=similarity_list,
-                                            pos=(0.8, 0.0),  # Grid position
+                                            pos=(0.8, 0.2),  # Grid position
                                             width=0.1,   # Button width
-                                            height=0.1,  # Button height
+                                            height=0.15,  # Button height
                                             color="blue",  # Button color
                                             action=self.similarity_action,   # Action to perform when a button is clicked
                                             rows=5,       # Number of rows
                                             columns=1,    # Number of columns
-                                            horizontal_spacing=0.02,  # Horizontal spacing between buttons
-                                            vertical_spacing=0.02      # Vertical spacing between buttons
+                                            horizontal_spacing=0.01,  # Horizontal spacing between buttons
+                                            vertical_spacing=0.01      # Vertical spacing between buttons
                                         )
         self.add_element(self.playSoundButton)
         self.add_element(self.submitButton)
