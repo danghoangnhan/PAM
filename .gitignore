@@ -7,3 +7,6 @@ setup.py
 *.mp3
 venv
 prompt.txt
+component/__pycache__
+config/__pycache__
+
