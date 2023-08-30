@@ -1,12 +1,11 @@
-from psychopy import visual
 from component.text import TextElement
+from psychopy.visual.rect import Rect
+import psychopy.visual.line
 
 
 class ButtonElement:
     def __init__(self, win, text, pos, width, height, color, action=None):
-        self.button = visual.Rect(win, width=width, height=height, fillColor=color, pos=pos)
-        
-
+        self.button = Rect(win, width=width, height=height, fillColor=color, pos=pos)
         self.text = TextElement(win=win,text=text,pos=pos)
 
         self.action = action
@@ -21,12 +20,6 @@ class ButtonElement:
                         }
                     }        
         self.state = 'unpress'  # Initial state is 'unpress'
-        # self.button = visual.ImageStim(
-        #     win=win,
-        #     image=self.text.create_text_image(width=width,height=height),
-        #     pos=pos,
-        #     size=(width, height)
-        # )   
 
     def draw(self):
         self.button.fillColor = self.states[self.state]['button_color']

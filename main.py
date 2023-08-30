@@ -1,7 +1,8 @@
 from component.button import ButtonElement, ButtonList
 from psychopy import visual, core, event
 from component.screen import StartScreen
-import pyglet
+import logging
+import psychopy.visual.line
 
 class Game:
     def __init__(self):
@@ -33,10 +34,11 @@ class Game:
 
     def setScreen(self,screen):
         self.current_screen = screen
-
-game = Game()
-game.start()
-
+try:
+    game = Game()
+    game.start()
+except Exception as e:
+    logging.error("An error occurred: %s", str(e))
 
 
 
