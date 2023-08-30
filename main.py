@@ -1,13 +1,15 @@
 from component.button import ButtonElement, ButtonList
 from psychopy import visual, core, event
 from component.screen import StartScreen
-
+import pyglet
 
 class Game:
     def __init__(self):
         self.win  = visual.Window([800, 600], color="white")
         self.current_screen = StartScreen(self.win)
         self.mouse = event.Mouse()
+
+
     def start(self):
         while self.current_screen is not None:
                 self.current_screen.draw()

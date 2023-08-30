@@ -3,12 +3,11 @@ from component.model import Answer
 from component.text import TextElement
 from component.button import ButtonElement,ButtonList
 import os
-from config.dir import data_dir
 from pydub import AudioSegment
 from pydub.playback import play
-from config.font import color_dict
+from config.constant import color_dict
 from config.constant import pofomopo_consonants,similarity_list
-
+from config.dir import audio_dir
 
 class BaseScreen:
     def __init__(self, win):
@@ -54,7 +53,7 @@ class StartScreen(BaseScreen):
 class TestScreen(BaseScreen):
     def __init__(self, win):
         super().__init__(win)
-        self.answerList  = self.get_m4a_files(data_dir)
+        self.answerList  = self.get_m4a_files(audio_dir)
         self.current_index = 0
         # List of BofoMo consonants
         self.playSoundButton = ButtonElement(win, "Play Sound", pos=(-0.2, 0.2), width=0.2, height=0.1, color="blue", action=self.play_sound)
@@ -65,9 +64,9 @@ class TestScreen(BaseScreen):
         self.bofomo_consonants_list  = ButtonList(
                                             win=win,
                                             textList=pofomopo_consonants,
-                                            pos=(-0.4, -0.55),  # Grid position
-                                            width=0.2,   # Button width
-                                            height=0.15,  # Button height
+                                            pos=(-0.3, -0.45),  # Grid position
+                                            width=0.25,   # Button width
+                                            height=0.2,  # Button height
                                             color="blue",  # Button color
                                             action=self.bofomo_consonant_action,   # Action to perform when a button is clicked
                                             rows=5,       # Number of rows

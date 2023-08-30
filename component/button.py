@@ -1,9 +1,14 @@
 from psychopy import visual
+from component.text import TextElement
+
 
 class ButtonElement:
     def __init__(self, win, text, pos, width, height, color, action=None):
         self.button = visual.Rect(win, width=width, height=height, fillColor=color, pos=pos)
-        self.text = visual.TextStim(win, text=text, pos=pos)
+        
+
+        self.text = TextElement(win=win,text=text,pos=pos)
+
         self.action = action
         self.states = {
                         'unpress': {
@@ -16,11 +21,16 @@ class ButtonElement:
                         }
                     }        
         self.state = 'unpress'  # Initial state is 'unpress'
+        # self.button = visual.ImageStim(
+        #     win=win,
+        #     image=self.text.create_text_image(width=width,height=height),
+        #     pos=pos,
+        #     size=(width, height)
+        # )   
 
     def draw(self):
-        state_data = self.states[self.state]
-        self.button.fillColor = state_data['button_color']
-        self.text.setColor(state_data['text_color'])
+        self.button.fillColor = self.states[self.state]['button_color']
+        self.text.set_color(self.states[self.state]['text_color'])
         self.button.draw()
         self.text.draw()
 
@@ -41,8 +51,6 @@ class ButtonList:
         self.button_elements = []
         for i, text in enumerate(textList):
             button_pos = (positions[i][0] + self.pos[0], positions[i][1] + self.pos[1])  # Use positions[i] here
-
-            print(button_pos)
             self.button_elements.append(ButtonElement(win, text, pos=button_pos, width=width, height=height, color=color, action=action))
 
     def draw(self):
