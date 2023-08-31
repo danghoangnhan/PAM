@@ -42,10 +42,18 @@ class EndScreen(BaseScreen):
     def quit(self):
         return None  # This will end the experiment
     def saveResult(self,history):
+        user_df = csvHandler.get_user()
+        user_df = user_df.drop(user_df.index)
+
         result = pd.DataFrame([element.to_dict() for element in history])
         result['participate_number'] = csvHandler.get_new_sessionId()
-        print(result)
+        print(user_df)
+        user_df = user_df.append({"participantID":csvHandler.get_new_sessionId()}, ignore_index=True)
+        print(user_df)
+
         csvHandler.append_history_data(result)
+        csvHandler.append_user_data(user_df)
+
 
 # StartScreen
 class StartScreen(BaseScreen):
