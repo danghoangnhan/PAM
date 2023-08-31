@@ -17,19 +17,33 @@ class csvHandler:
     
     @staticmethod
     def get_exam():
-        exam_dir = pandas.read_csv(exam_dir)
-        return exam_dir
+        return pandas.read_csv(exam_dir)
     
+    @staticmethod
+    def get_user():
+        return pandas.read_csv(user_dir)
+    
+    @staticmethod
+    def append_history_data(new_df):
+        csvHandler.append_data(new_df,history_dir)
+        
+    @staticmethod
+    def append_user_data(new_df):
+        csvHandler.append_data(new_df,user_dir)
+
     @staticmethod
     def append_data(new_df,csv_file_path):
         new_df.to_csv(csv_file_path, mode='a', header=False, index=False)
 
     @staticmethod
     def dumpd_data():
-        user_df = pandas.read_csv(user_dir)
-        exam_df = pandas.read_csv(exam_dir)
         history_df = pandas.read_csv(history_dir)
-        
-        user_df.to_excel('user_df.xlsx', index=False)
-        exam_dir.to_excel('exam_df.xlsx', index=False)
-        history_dir.to_excel('history_df.xlsx', index=False)
+        history_dir.to_excel('history.xlsx', index=False)
+    
+    @staticmethod
+    def readStructure_user():
+        return  csvHandler.readStructure(user_dir)
+
+    @staticmethod
+    def readStructure(dir):
+        return  pandas.read_csv(dir, nrows=1)
