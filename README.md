@@ -6,7 +6,7 @@ QuizzApp is a Python application for conducting quizzes or tests with audio ques
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- FFmpeg
 - Conda (for creating and managing virtual environments)
 
 ### Setup
