@@ -1,4 +1,4 @@
-name: psychopy
+name: quizzapp
 channels:
 - conda-forge
 - anaconda
