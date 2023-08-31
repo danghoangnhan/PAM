@@ -3,13 +3,14 @@ from psychopy import visual, core, event
 from component.screen import StartScreen
 import logging
 import psychopy.visual.line
+from storage import localStorage
 
 class Game:
     def __init__(self):
         self.win  = visual.Window([1200, 800], color="white")
         self.current_screen = StartScreen(self.win)
         self.mouse = event.Mouse()
-
+        self.sessionID = localStorage.get_new_sessionId()
 
     def start(self):
         while self.current_screen is not None:
