@@ -8,6 +8,8 @@ from pydub.playback import play
 from config.constant import color_dict
 from config.constant import pofomopo_consonants,similarity_list
 from config.dir import audio_dir
+from storage.localStorage import csvHandler
+import pandas as pd
 
 class BaseScreen:
     def __init__(self, win):
@@ -27,8 +29,9 @@ class BaseScreen:
             element.draw()
             
 class EndScreen(BaseScreen):
-    def __init__(self, win):
+    def __init__(self, win,result):
         super().__init__(win)
+        self.saveResult(result)
         self.add_element(TextElement(win, "Thank you for participating!", pos=(0, 0),color=color_dict["black"]))
         self.add_element(ButtonElement(win, "Replay", pos=(0, -0.2), width=0.3, height=0.2, color="green", action=self.replay))
         self.add_element(ButtonElement(win, "Quit", pos=(0, -0.5), width=0.3, height=0.2, color="red", action=self.quit))
@@ -38,6 +41,11 @@ class EndScreen(BaseScreen):
 
     def quit(self):
         return None  # This will end the experiment
+    def saveResult(self,history):
+        result = pd.DataFrame([element.to_dict() for element in history])
+        result['participate_number'] = csvHandler.get_new_sessionId()
+        print(result)
+        csvHandler.append_history_data(result)
 
 # StartScreen
 class StartScreen(BaseScreen):
@@ -53,7 +61,7 @@ class StartScreen(BaseScreen):
 class TestScreen(BaseScreen):
     def __init__(self, win):
         super().__init__(win)
-        self.answerList  = self.get_m4a_files(audio_dir)
+        self.answerList  = self.loadQuestion(audio_dir)
         self.current_index = 0
         # List of BofoMo consonants
         self.playSoundButton = ButtonElement(win, "Play Sound", pos=(-0.4, 0.5), width=0.4, height=0.2, color="blue", action=self.play_sound)
@@ -113,12 +121,15 @@ class TestScreen(BaseScreen):
         return self
         
 
-    def get_m4a_files(self, directory):
+    def loadQuestion(self, audio_dir):
+        question_df = csvHandler.get_exam()
         quetionList = []
-        for filename in os.listdir(directory):
-            filename = os.path.join(directory, filename)
-            sound_file = AudioSegment.from_file(file = os.path.join(directory, filename))
-            quetionList.append(Answer(question=sound_file))
+        for index, row in question_df.iterrows():
+            filename = row['path']
+            filename = os.path.join(audio_dir, filename)
+            sound_file = AudioSegment.from_file(file = os.path.join(audio_dir, filename))
+            answer = Answer(question=sound_file,id=index)
+            quetionList.append(answer)
         return quetionList
     
     def update_button_states(self):
@@ -138,7 +149,7 @@ class TestScreen(BaseScreen):
         self.similarities_list.updateState(current_question.get_similarity())
 
     def submit_test(self):
-        return EndScreen(self.win)
+        return EndScreen(self.win,self.answerList)
     
     def updateProcess(self):
         self.progress.set_text("Test Number:{}/{}".format(self.current_index+1,len(self.answerList)))

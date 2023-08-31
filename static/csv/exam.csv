@@ -1,9 +1,9 @@
-stimulu,speaker's sex,path
-pi,F,pi.wav
-pe,F,pe.wav
-pa,F,pa.wav
-po,F,po.wav
-pu,F,pu.wav
-fa_m,M,fa_m.wav
-sa_m,M,sa_m.wav
-va_m,M,va_m.wav
+stimulu,speaker_sex,path,stimulu_id
+pi,F,pi.wav,1
+pe,F,pe.wav,2
+pa,F,pa.wav,3
+po,F,po.wav,4
+pu,F,pu.wav,5
+fa_m,M,fa_m.wav,6
+sa_m,M,sa_m.wav,7
+va_m,M,va_m.wav,8

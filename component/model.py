@@ -1,5 +1,6 @@
 class Answer:
-    def __init__(self, question,similarity=-1,answer=-1):
+    def __init__(self,id, question,similarity=-1,answer=-1):
+        self.id = id
         self.question = question
         self.answer = answer
         self.similarity = similarity
@@ -27,3 +28,13 @@ class Answer:
     # Getter method for 'question'
     def get_question(self):
         return self.question
+    
+    def to_dict(self):
+        """
+        Convert the Answer object to a dictionary.
+        """
+        return {
+            'question': self.id,
+            'participants_ans': self.answer,
+            'participants_evaluation': self.similarity
+        }
