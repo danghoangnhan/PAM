@@ -10,6 +10,7 @@ from config.constant import pofomopo_consonants,similarity_list
 from config.dir import audio_dir
 from storage.localStorage import csvHandler
 import pandas as pd
+import random
 
 class BaseScreen:
     def __init__(self, win):
@@ -47,9 +48,10 @@ class EndScreen(BaseScreen):
 
         result = pd.DataFrame([element.to_dict() for element in history])
         result['participate_number'] = csvHandler.get_new_sessionId()
-        print(user_df)
         user_df = user_df.append({"participantID":csvHandler.get_new_sessionId()}, ignore_index=True)
         print(user_df)
+        print(result)
+
 
         csvHandler.append_history_data(result)
         csvHandler.append_user_data(user_df)
@@ -138,6 +140,8 @@ class TestScreen(BaseScreen):
             sound_file = AudioSegment.from_file(file = os.path.join(audio_dir, filename))
             answer = Answer(question=sound_file,id=index)
             quetionList.append(answer)
+        random.shuffle(quetionList)
+        print(quetionList)
         return quetionList
     
     def update_button_states(self):

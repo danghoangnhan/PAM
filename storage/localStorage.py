@@ -6,14 +6,10 @@ class csvHandler:
     @staticmethod
     def get_new_sessionId():
         user_df = pandas.read_csv(user_dir)
+        if user_df.empty:
+            return 1
         max_value = user_df['participantID'].max()
-        return max_value+1
-    
-    @staticmethod
-    def get_new_sessionId():
-        user_df = pandas.read_csv(user_dir)
-        max_value = user_df['participantID'].max()
-        return max_value+1
+        return int(max_value) + 1
     
     @staticmethod
     def get_exam():
@@ -33,6 +29,7 @@ class csvHandler:
 
     @staticmethod
     def append_data(new_df,csv_file_path):
+        print(new_df)
         new_df.to_csv(csv_file_path, mode='a', header=False, index=False)
 
     @staticmethod

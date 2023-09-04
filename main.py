@@ -4,7 +4,6 @@ from component.screen import StartScreen
 import logging
 import psychopy.visual.line
 
-from storage.localStorage import csvHandler
 
 
 class Game:
