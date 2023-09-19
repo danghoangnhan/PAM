@@ -46,14 +46,14 @@ class EndScreen(BaseScreen):
         user_df = csvHandler.get_user()
         user_df = user_df.drop(user_df.index)
 
-        result = pd.DataFrame([element.to_dict() for element in history])
-        result['participate_number'] = csvHandler.get_new_sessionId()
+        new_history_value = pd.DataFrame([element.to_dict() for element in history])
+        new_history_value['participate_number'] = csvHandler.get_new_sessionId()
         user_df = user_df.append({"participantID":csvHandler.get_new_sessionId()}, ignore_index=True)
         print(user_df)
-        print(result)
+        print(new_history_value)
 
 
-        csvHandler.append_history_data(result)
+        csvHandler.append_history_data(new_history_value)
         csvHandler.append_user_data(user_df)
 
 
@@ -168,8 +168,6 @@ class TestScreen(BaseScreen):
     
     # Action for BofoMo consonants
     def bofomo_consonant_action(self, button_index):
-        # This function is called when a BofoMo consonant button is clicked.
-        # 'button_index' is the index of the button that was clicked.
         selected_consonant = pofomopo_consonants[button_index]
         current_question = self.answerList[self.current_index]
         current_question.set_answer(button_index)
@@ -179,11 +177,9 @@ class TestScreen(BaseScreen):
 
     # Action for similarities
     def similarity_action(self, button_index):
-        # This function is called when a similarity button is clicked.
-        # 'button_index' is the index of the button that was clicked.
         selected_similarity = similarity_list[button_index]
+        print("selected_similarity:",selected_similarity)
         current_question = self.answerList[self.current_index]
-        current_question.set_similarity(button_index)
-        print(f"Similarity button clicked: {selected_similarity}")
-        self.similarities_list.updateState(current_question.get_similarity())
+        current_question.set_similarity(selected_similarity)
+        self.similarities_list.updateState(button_index)
         return self
