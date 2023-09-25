@@ -1,20 +1,20 @@
-name: quizzapp1
+name: quizzapp
 channels:
 - conda-forge
 - anaconda
 dependencies:
-- python=3.8
+# - python=3.8
 - psychopy=2022.2.5
-- ffmpeg=6.0.0
+- ffmpeg
 - pip=23.2.1
-- pyaudio=0.2.13
+- pyaudio
 - pip:
-  - psychtoolbox==3.0.19.0
-  - pygame==2.5.2
-  - pyo==1.0.5
+  - psychtoolbox
+  - pygame
+  - pyo
   - pyparallel; platform_system != "Windows"
   - SoundFile; platform_system == "Windows"
   - websocket_client
   - pyinstaller==5.13.2
   - pydub==0.25.1
-  - ffprobe==0.5
+  - ffprobe

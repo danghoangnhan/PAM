@@ -1,39 +1,29 @@
-import cx_Freeze
-import logging
+from cx_Freeze import setup, Executable
+import sys
 
-# Configure error logging settings
-logging.basicConfig(filename='error.log', level=logging.ERROR)
 
-# Create a file handler for error logging
-error_log_handler = logging.FileHandler('error.log')
-error_log_handler.setLevel(logging.ERROR)
-
-# Create a formatter for the log messages (customize as needed)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-error_log_handler.setFormatter(formatter)
-
-# Add the error log handler to the root logger
-root_logger = logging.getLogger()
-root_logger.addHandler(error_log_handler)
 
 # Define the list of files to include
-include_files = [('static', 'static')]  # ('source_path', 'destination_path')
+include_files = [('static', '')]  # ('source_path', 'destination_path')
+packages=['numpy','pyglet','psychopy']  
+includes= []
 
-# Continue with your cx_Freeze setup script
-executables = [cx_Freeze.Executable("main.py", base=None)]
+base = None
+if sys.platform == 'win32':
+    base = 'Win32GUI'
 
 options = {
     'build_exe': {
-        'packages': [],  # Add your packages here
-        'includes': [],  # Add your includes here
+        'packages': packages,  
+        'includes':includes,  
         'include_files': include_files,  # Include the static folder
     }
 }
 
-cx_Freeze.setup(
+setup(
     name="QuizzApp",
     version="1.0",
     description="Your Application Description",
-    executables=executables,
+    executables=[Executable("main.py", base=base)],
     options=options
 )

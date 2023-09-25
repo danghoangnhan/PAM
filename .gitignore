@@ -9,3 +9,10 @@ prompt.txt
 component/__pycache__
 config/__pycache__
 static/csv
+Lib
+libs
+Scripts
+share
+static
+pyvenv.cfg
+include

@@ -45,13 +45,13 @@ class EndScreen(BaseScreen):
     def saveResult(self,history):
         user_df = csvHandler.get_user()
         user_df = user_df.drop(user_df.index)
-
         new_history_value = pd.DataFrame([element.to_dict() for element in history])
         new_history_value['participate_number'] = csvHandler.get_new_sessionId()
-        user_df = user_df.append({"participantID":csvHandler.get_new_sessionId()}, ignore_index=True)
-        print(user_df)
-        print(new_history_value)
-
+        new_history_value = new_history_value.sort_values(by='question')
+        print("checkes")
+        # user_df = user_df.append({"participantID":csvHandler.get_new_sessionId()}, ignore_index=True)
+        user_df = pd.concat([user_df, pd.DataFrame([{"participantID":csvHandler.get_new_sessionId()}])], ignore_index=True)
+        print("checkes")
 
         csvHandler.append_history_data(new_history_value)
         csvHandler.append_user_data(user_df)
@@ -141,7 +141,6 @@ class TestScreen(BaseScreen):
             answer = Answer(question=sound_file,id=index)
             quetionList.append(answer)
         random.shuffle(quetionList)
-        print(quetionList)
         return quetionList
     
     def update_button_states(self):
@@ -164,7 +163,6 @@ class TestScreen(BaseScreen):
         for question in self.answerList:
             question.set_answer(pofomopo_consonants[question.get_answer()] if question.get_answer()!= -1 else -1)
             question.set_similarity(similarity_list[question.get_similarity()] if question.get_similarity()!=-1 else -1)
-        print(self.answerList)
         return EndScreen(self.win,self.answerList)
     
     def updateProcess(self):
