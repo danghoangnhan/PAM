@@ -10,23 +10,23 @@ QuizzApp is a Python application for conducting quizzes or tests with audio ques
 - Conda (for creating and managing virtual environments)
 
 ### Setup
-
-1. Clone the repository:
-
    ```bash
-   git clone https://github.com/danghoangnhan/QuizzApp.git
-   cd QuizzApp
-   ```
-2. Create a Conda environment from the env.yml file:
+   pip install virtualenv        # if your system didn't install before
 
-   ```bash
-   conda env create -f environment.yml
-   ```
-3. Activate the Conda environment:
+   # cd to the project directory
+   virtualenv venv               # create virtualenviroment venv
 
-   ```bash
-   conda activate quizzapp
+   # Activate venv
+   venv\Scripts\activate         # Windows
+   source venv/bin/activate      # Mac and Linux
 
+   # handle package
+   pip install -r requirements.txt     # Import using package from requirements.txt
+   pip freeze > requirements.txt       # Export using package to requirements.txt 
+   pip list                            # list all packages install in this virtualenv
+
+   # exit venv
+   deactivate
    ```
 
 ## Usage
