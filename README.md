@@ -50,7 +50,7 @@ This will create an executable in the build directory.
 ## Citation
 
 ```
-@misc{PAMTest,
+@misc{PAMSimulator,
     author={Tu-Hung Jen},
     title={PAMSimulator - experiments based on the Perceptual Assimilation Model},
     year={2023},
