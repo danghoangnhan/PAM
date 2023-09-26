@@ -1,5 +1,7 @@
 # PAMSimulator 
 
+[![Build Status](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/python-app.yml/badge.svg)](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/python-app.yml)
+
 The PAMSimulator is a  tool designed to conduct experiments based on the Perceptual Assimilation Model (PAM). This application allows researchers and linguists to create and administer PAM experiments for the study of speech sound perception and categorization.
 
 
