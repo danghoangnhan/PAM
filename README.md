@@ -46,3 +46,13 @@ python setup.py build
 ```
 
 This will create an executable in the build directory.
+
+##Citation
+```
+@misc{PAMTest,
+    author={Tu-Hung Jen},
+    title={Vietnamese Instruction Data Corpus for Large-Scale Finetuning of Language Models},
+    year={2023},
+    url={https://github.com/danghoangnhan/PAM},
+}
+```
