@@ -1,6 +1,6 @@
 # QuizzApp
 
-QuizzApp is a Python application for conducting quizzes or tests with audio questions.
+The PAM Test Application is a  tool designed to conduct experiments based on the Perceptual Assimilation Model (PAM). This application allows researchers and linguists to create and administer PAM experiments for the study of speech sound perception and categorization.
 
 ## Installation
 
