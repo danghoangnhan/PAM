@@ -1,6 +1,6 @@
-# PAM 
+# PAMSimulator 
 
-The PAM is a  tool designed to conduct experiments based on the Perceptual Assimilation Model (PAM). This application allows researchers and linguists to create and administer PAM experiments for the study of speech sound perception and categorization.
+The PAMSimulator is a  tool designed to conduct experiments based on the Perceptual Assimilation Model (PAM). This application allows researchers and linguists to create and administer PAM experiments for the study of speech sound perception and categorization.
 
 ## Installation
 
@@ -52,8 +52,8 @@ This will create an executable in the build directory.
 ```
 @misc{PAMTest,
     author={Tu-Hung Jen},
-    title={PAM Test Application},
+    title={PAMSimulator - experiments based on the Perceptual Assimilation Model},
     year={2023},
-    url={https://github.com/danghoangnhan/PAM},
+    url={https://github.com/danghoangnhan/PAMSimulator},
 }
 ```
