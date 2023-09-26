@@ -2,7 +2,6 @@
 
 The PAMSimulator is a  tool designed to conduct experiments based on the Perceptual Assimilation Model (PAM). This application allows researchers and linguists to create and administer PAM experiments for the study of speech sound perception and categorization.
 
-## Installation
 
 ### Prerequisites
 
