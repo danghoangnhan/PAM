@@ -47,7 +47,7 @@ python setup.py build
 
 This will create an executable in the build directory.
 
-##Citation
+## Citation
 
 ```
 @misc{PAMTest,
