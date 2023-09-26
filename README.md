@@ -1,12 +1,6 @@
 # PAMSimulator 
 
-[![PyPi Cheese Shop](https://img.shields.io/pypi/v/pygmm.svg)](https://img.shields.io/pypi/v/pygmm.svg)
-[![Build Status](https://github.com/arkottke/pygmm/actions/workflows/python-app.yml/badge.svg)](https://github.com/arkottke/pygmm/actions/workflows/python-app.yml)
-[![Code Quality](https://api.codacy.com/project/badge/Grade/abc9878c890143c8b590e6f3602056b7)](https://app.codacy.com/gh/arkottke/pygmm/dashboard)
-[![Test Coverage](https://api.codacy.com/project/badge/Coverage/abc9878c890143c8b590e6f3602056b7)](https://app.codacy.com/gh/arkottke/pygmm/dashboard)
-#![License](https://img.shields.io/badge/license-MIT-blue.svg)
-#[![DOI](https://zenodo.org/badge/53176693.svg)](https://zenodo.org/badge/latestdoi/53176693)
-
+[![Build Status](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/python-app.yml/badge.svg)](https://github.com/arkottke/pygmm/actions/workflows/python-app.yml)
 
 The PAMSimulator is a  tool designed to conduct experiments based on the Perceptual Assimilation Model (PAM). This application allows researchers and linguists to create and administer PAM experiments for the study of speech sound perception and categorization.
 
