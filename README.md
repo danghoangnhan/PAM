@@ -6,8 +6,8 @@ The PAMSimulator is a  tool designed to conduct experiments based on the Percept
 
 ### Prerequisites
 
-- FFmpeg
-- Conda (for creating and managing virtual environments)
+- [FFmpeg](https://www.geeksforgeeks.org/how-to-install-ffmpeg-on-windows/)
+
 
 ### Setup
    ```bash
