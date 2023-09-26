@@ -1,3 +1,4 @@
+altgraph==0.17.4
 arabic-reshaper==3.0.0
 astunparse==1.6.3
 beautifulsoup4==4.12.2
@@ -15,6 +16,7 @@ dukpy==0.3.0
 elementpath==4.1.5
 esprima==4.0.1
 et-xmlfile==1.1.0
+ffprobe==0.5
 ffpyplayer==4.5.0
 fonttools==4.42.1
 freetype-py==2.4.0
@@ -27,6 +29,7 @@ html2text==2020.1.16
 idna==3.4
 imageio==2.31.4
 imageio-ffmpeg==0.4.9
+importlib-metadata==6.8.0
 importlib-resources==6.1.0
 javascripthon==0.12
 jedi==0.19.0
@@ -45,14 +48,19 @@ openpyxl==3.1.2
 packaging==23.1
 pandas==2.0.3
 parso==0.8.3
+pefile==2023.2.7
 Pillow==10.0.1
 psutil==5.9.5
 psychopy==2023.2.1
 psychtoolbox==3.0.19.0
 py-cpuinfo==9.0.0
+PyAudio==0.2.13
 pycparser==2.21
 pydub==0.25.1
 pyglet==1.4.11
+pyinstaller==6.0.0
+pyinstaller-hooks-contrib==2023.8
+pyo==1.0.5
 pyparallel==0.2.2
 pyparsing==3.1.1
 pypi-search==2.0
@@ -67,6 +75,7 @@ python-gitlab==3.15.0
 python-vlc==3.0.11115
 pytz==2023.3.post1
 pywin32==306
+pywin32-ctypes==0.2.2
 pyWinhook==1.6.2
 PyYAML==6.0.1
 pyzmq==25.1.1

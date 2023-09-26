@@ -48,11 +48,7 @@ class EndScreen(BaseScreen):
         new_history_value = pd.DataFrame([element.to_dict() for element in history])
         new_history_value['participate_number'] = csvHandler.get_new_sessionId()
         new_history_value = new_history_value.sort_values(by='question')
-        print("checkes")
-        # user_df = user_df.append({"participantID":csvHandler.get_new_sessionId()}, ignore_index=True)
         user_df = pd.concat([user_df, pd.DataFrame([{"participantID":csvHandler.get_new_sessionId()}])], ignore_index=True)
-        print("checkes")
-
         csvHandler.append_history_data(new_history_value)
         csvHandler.append_user_data(user_df)
 
@@ -160,7 +156,8 @@ class TestScreen(BaseScreen):
         self.similarities_list.updateState(current_question.get_similarity())
 
     def submit_test(self):
-        for question in self.answerList:
+        for  question in self.answerList:
+            question.set_id(question.get_id()+1)
             question.set_answer(pofomopo_consonants[question.get_answer()] if question.get_answer()!= -1 else -1)
             question.set_similarity(similarity_list[question.get_similarity()] if question.get_similarity()!=-1 else -1)
         return EndScreen(self.win,self.answerList)

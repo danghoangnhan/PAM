@@ -4,6 +4,15 @@ class Answer:
         self.question = question
         self.answer = answer
         self.similarity = similarity
+    
+
+    # Setter method for 'answer'
+    def set_id(self, id):
+        self.id = id
+
+    # Getter method for 'answer'
+    def get_id(self):
+        return self.id
 
     # Setter method for 'answer'
     def set_answer(self, answer):

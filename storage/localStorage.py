@@ -28,9 +28,10 @@ class csvHandler:
         csvHandler.append_data(new_df,user_dir)
 
     @staticmethod
-    def append_data(new_df,path):
-        new_df.to_excel(path, index=False)
-
+    def append_data(new_df,path,sheet_name='Sheet1'):
+            df_excel = pandas.read_excel(path)
+            result = pandas.concat([df_excel, new_df], ignore_index=True)
+            result.to_excel(path, index=False)
 
     @staticmethod
     def dumpd_data():
