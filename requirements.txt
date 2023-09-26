@@ -98,3 +98,4 @@ xmlschema==2.5.0
 zipp==3.17.0
 zope.event==5.0
 zope.interface==6.0
+flake8
