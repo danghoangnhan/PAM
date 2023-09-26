@@ -1,8 +1,8 @@
 # PAMSimulator 
 
-[![Linux Build Status](https://img.shields.io/badge/Linux-Build%20Status-brightgreen.svg)](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/linux-app.yml)
-[![Windows Build Status](https://img.shields.io/badge/Windows-Build%20Status-blue.svg)](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/window-app.yml)
+[![Build Status](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/linux-app.yml/badge.svg)](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/linux-app.yml)
 
+[![Build Status](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/window-app.yml/badge.svg)](https://github.com/danghoangnhan/PAMSimulator/actions/workflows/window-app.yml)
 
 The PAMSimulator is a  tool designed to conduct experiments based on the Perceptual Assimilation Model (PAM). This application allows researchers and linguists to create and administer PAM experiments for the study of speech sound perception and categorization.
 
