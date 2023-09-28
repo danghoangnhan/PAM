@@ -1,4 +1,4 @@
-name: Windows Application
+name: Windows
 
 on:
   push:
