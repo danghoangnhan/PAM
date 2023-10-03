@@ -4,6 +4,8 @@ from component.screen import StartScreen
 import logging
 import psychopy.visual.line
 
+from mouseHandler import is_instance_of_class
+
 
 
 class Game:
@@ -20,17 +22,11 @@ class Game:
                 # Check for mouse clicks
                 if self.mouse.getPressed()[0]:  # 0 represents the left mouse button
                     for element in self.current_screen.elements:
-                        if isinstance(element, ButtonElement) and element.containMouse(self.mouse):
+                        if is_instance_of_class(element) and  element.containMouse(self.mouse):
                             if element.action:
-                                self.setScreen(element.action())
+                                self.setScreen(element.action(self.mouse))
                                 core.wait(0.2)
-                        if isinstance(element, ButtonList) and element.containMouse(self.mouse):
-                            if element.action:
-                                self.setScreen(element.action(mouse=self.mouse))
-                                core.wait(0.2)
-
-        if self.current_screen==None:
-            print("screen is none")
+        print("screen is None")
         self.win.close()
         core.quit()
 

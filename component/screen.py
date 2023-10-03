@@ -1,4 +1,5 @@
 from component.button import ButtonElement
+from component.modal import ConfirmationModal
 from component.model import Answer
 from component.text import TextElement
 from component.button import ButtonElement,ButtonList
@@ -8,7 +9,7 @@ from pydub.playback import play
 from config.constant import color_dict
 from config.constant import pofomopo_consonants,similarity_list
 from config.dir import audio_dir
-from storage.localStorage import csvHandler
+from storage.localStorage import dataHandaler
 import pandas as pd
 import random
 
@@ -37,20 +38,20 @@ class EndScreen(BaseScreen):
         self.add_element(ButtonElement(win, "Replay", pos=(0, -0.2), width=0.3, height=0.2, color="green", action=self.replay))
         self.add_element(ButtonElement(win, "Quit", pos=(0, -0.5), width=0.3, height=0.2, color="red", action=self.quit))
 
-    def replay(self):
+    def replay(self,mouse):
         return StartScreen(self.win)
 
-    def quit(self):
+    def quit(self,mouse):
         return None  # This will end the experiment
     def saveResult(self,history):
-        user_df = csvHandler.get_user()
+        user_df = dataHandaler.get_user()
         user_df = user_df.drop(user_df.index)
         new_history_value = pd.DataFrame([element.to_dict() for element in history])
-        new_history_value['participate_number'] = csvHandler.get_new_sessionId()
+        new_history_value['participate_number'] = dataHandaler.get_new_sessionId()
         new_history_value = new_history_value.sort_values(by='question')
-        user_df = pd.concat([user_df, pd.DataFrame([{"participantID":csvHandler.get_new_sessionId()}])], ignore_index=True)
-        csvHandler.append_history_data(new_history_value)
-        csvHandler.append_user_data(user_df)
+        user_df = pd.concat([user_df, pd.DataFrame([{"participantID":dataHandaler.get_new_sessionId()}])], ignore_index=True)
+        dataHandaler.append_history_data(new_history_value)
+        dataHandaler.append_user_data(user_df)
 
 
 # StartScreen
@@ -58,9 +59,13 @@ class StartScreen(BaseScreen):
     def __init__(self, win):
         super().__init__(win)
         self.add_element(TextElement(win, "Quizz Experiment", pos=(0, 0),color=color_dict["black"]))
-        self.add_element(ButtonElement(win, "Start", pos=(0, -0.2), width=0.3, height=0.2, color="green", action=self.next_screen))
+        self.add_element(ButtonElement(win, "Start", pos=(0, -0.2), width=0.3, height=0.2, color="green", action=self.navigate_start_screen))
+        self.add_element(ButtonElement(win, "Setting", pos=(0, -0.5), width=0.3, height=0.2, color="blue", action=self.navigate_setting_screen))
 
-    def next_screen(self):
+    def navigate_setting_screen(self,mouse):
+        return SettingScreen(self.win)
+    
+    def navigate_start_screen(self,mouse):
         return TestScreen(self.win)
 
 # TestScreen
@@ -109,26 +114,26 @@ class TestScreen(BaseScreen):
         self.update_button_states()
 
         
-    def next_question(self):
+    def next_question(self, mouse):
         self.current_index += 1
         self.update_button_states()
         self.updateProcess()
         return self
     
-    def previous_question(self):
+    def previous_question(self, mouse):
         self.current_index -= 1
         self.update_button_states()
         self.updateProcess()
         return self
 
-    def play_sound(self):
+    def play_sound(self, mouse):
         current_question = self.answerList[self.current_index]
         play(current_question.get_question())
         return self
         
 
     def loadQuestion(self, audio_dir):
-        question_df = csvHandler.get_exam()
+        question_df = dataHandaler.get_exam()
         quetionList = []
         for index, row in question_df.iterrows():
             filename = row['path']
@@ -155,7 +160,7 @@ class TestScreen(BaseScreen):
         self.bofomo_consonants_list.updateState(current_question.get_answer())
         self.similarities_list.updateState(current_question.get_similarity())
 
-    def submit_test(self):
+    def submit_test(self, mouse):
         for  question in self.answerList:
             question.set_id(question.get_id()+1)
             question.set_answer(pofomopo_consonants[question.get_answer()] if question.get_answer()!= -1 else -1)
@@ -178,3 +183,29 @@ class TestScreen(BaseScreen):
         current_question.set_similarity(button_index)
         self.similarities_list.updateState(button_index)
         return self
+
+
+# Create the SettingScreen class with the Reset button and modal logic
+class SettingScreen(BaseScreen):
+    def __init__(self, win):
+        super().__init__(win)
+        self.add_element(TextElement(win, "Settings", pos=(0, 0), color=color_dict["black"]))
+        self.add_element(ButtonElement(win, "Reset", pos=(0, -0.2), width=0.3, height=0.2, color="red",action=self.show_confirmation_modal))
+        self.add_element(ButtonElement(win, "Back", pos=(0.7, -0.8), width=0.3, height=0.2, color="grey",action=self.navigate_main_screen))
+        self.confirmation_modal = ConfirmationModal(win, "Are you sure you want to reset?",confirm_action=self.confirm,cancel_action=self.cancel)
+        self.add_element(self.confirmation_modal)
+
+    def show_confirmation_modal(self, mouse):
+        self.confirmation_modal.visible = True
+        return self
+    
+    def confirm(self, mouse):
+        self.confirmation_modal.visible = False
+        dataHandaler.resetHistory()
+        return self
+
+    def cancel(self, mouse):
+        self.confirmation_modal.visible = False
+        return self
+    def navigate_main_screen(self,mouse):
+        return StartScreen(self.win)
