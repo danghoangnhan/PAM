@@ -1,17 +1,17 @@
-from component.button import ButtonElement
-from component.modal import ConfirmationModal
+from component.modal import ConfirmDialog
 from component.model import Answer
-from component.text import TextElement
-from component.button import ButtonElement,ButtonList
 import os
 from pydub import AudioSegment
 from pydub.playback import play
-from config.constant import color_dict
 from config.constant import pofomopo_consonants,similarity_list
 from config.dir import audio_dir
 from storage.localStorage import dataHandaler
 import pandas as pd
 import random
+from PyQt6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout,QDialog,QProgressBar,QGridLayout,QSizePolicy,QHBoxLayout,QSpacerItem
+from PyQt6.QtCore import Qt
+
+import logging
 
 class BaseScreen:
     def __init__(self, win):
@@ -29,20 +29,50 @@ class BaseScreen:
     def draw(self):
         for element in self.elements:
             element.draw()
+
             
-class EndScreen(BaseScreen):
-    def __init__(self, win,result):
-        super().__init__(win)
+class EndScreen(QWidget,):
+    def __init__(self,screen_height,screen_width, result):
+        super().__init__()
+        
+        self.screen_height = screen_height
+        self.screen_width = screen_width
+        self.resize(screen_height,screen_width)
+
+        self.result = result
+        self.initUI()
         self.saveResult(result)
-        self.add_element(TextElement(win, "Thank you for participating!", pos=(0, 0),color=color_dict["black"]))
-        self.add_element(ButtonElement(win, "Replay", pos=(0, -0.2), width=0.3, height=0.2, color="green", action=self.replay))
-        self.add_element(ButtonElement(win, "Quit", pos=(0, -0.5), width=0.3, height=0.2, color="red", action=self.quit))
 
-    def replay(self,mouse):
-        return StartScreen(self.win)
+    def initUI(self):
+        layout = QVBoxLayout(self)
 
-    def quit(self,mouse):
-        return None  # This will end the experiment
+        # Thank you message
+        thank_you_label = QLabel("Thank you for participating!", self)
+        layout.addWidget(thank_you_label)
+
+        # Replay button
+        replay_btn = QPushButton("Replay", self)
+        replay_btn.clicked.connect(self.navigate_start_screen)
+        layout.addWidget(replay_btn)
+
+        # Quit button
+        quit_btn = QPushButton("Quit", self)
+        quit_btn.clicked.connect(self.quit)
+        layout.addWidget(quit_btn)
+
+        self.setLayout(layout)
+
+
+    def navigate_start_screen(self):
+        logging.info("Open the StartScreen")
+        self.next_screen = StartScreen(self.screen_height,self.screen_width)
+        self.next_screen.show()
+        self.close()
+
+    def quit(self):
+        # Logic to quit the experiment
+        self.close()  # Closes the EndScreen window
+
     def saveResult(self,history):
         user_df = dataHandaler.get_user()
         user_df = user_df.drop(user_df.index)
@@ -53,83 +83,152 @@ class EndScreen(BaseScreen):
         dataHandaler.append_history_data(new_history_value)
         dataHandaler.append_user_data(user_df)
 
+class StartScreen(QWidget):
+    def __init__(self,screen_height,screen_width):
+        super().__init__()
+        self.screen_height = screen_height
+        self.screen_width = screen_width
+        self.resize(screen_height,screen_width)
+        logging.info("Initializing StartScreen")
+        self.initUI()
 
-# StartScreen
-class StartScreen(BaseScreen):
-    def __init__(self, win):
-        super().__init__(win)
-        self.add_element(TextElement(win, "Quizz Experiment", pos=(0, 0),color=color_dict["black"]))
-        self.add_element(ButtonElement(win, "Start", pos=(0, -0.2), width=0.3, height=0.2, color="green", action=self.navigate_start_screen))
-        self.add_element(ButtonElement(win, "Setting", pos=(0, -0.5), width=0.3, height=0.2, color="blue", action=self.navigate_setting_screen))
+    def initUI(self):
+        logging.info("Setting up UI for StartScreen")
+        
+        layout = QVBoxLayout()
 
-    def navigate_setting_screen(self,mouse):
-        return SettingScreen(self.win)
-    
-    def navigate_start_screen(self,mouse):
-        return TestScreen(self.win)
+        # Add stretch to center the widgets vertically
+        layout.addStretch()
+
+        # Title
+        title = QLabel("Quiz Experiment", self)
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet("font-size: 24px; font-weight: bold;")  # Increase font size and make it bold
+        layout.addWidget(title)
+
+        # Start button
+        start_btn = QPushButton("Start", self)
+        start_btn.clicked.connect(self.navigate_UserInformationScreen_screen)
+        start_btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        start_btn.setStyleSheet("background-color: green; color: white; font-size: 20px; padding: 10px;")
+        layout.addWidget(start_btn)
+
+        # Settings button
+        settings_btn = QPushButton("Settings", self)
+        settings_btn.clicked.connect(self.navigate_setting_screen)
+        settings_btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        settings_btn.setStyleSheet("background-color: gray; color: white; font-size: 20px; padding: 10px;")
+        layout.addWidget(settings_btn)
+
+        # Add another stretch to ensure buttons are centered
+        layout.addStretch()
+
+        self.setLayout(layout)
+        self.setWindowTitle('Start Screen')
+
+    def navigate_setting_screen(self):
+        logging.info(" Open the settings screen")
+        self.next_screen = SettingScreen(self.screen_height,self.screen_width)
+        self.next_screen.show()
+        self.close()
+
+    def navigate_UserInformationScreen_screen(self):
+        logging.info("Open the user information screen")
+        self.user_info_screen = UserInformationScreen(self.screen_height,self.screen_width)
+        self.user_info_screen.show()
+        self.close()
 
 # TestScreen
-class TestScreen(BaseScreen):
-    def __init__(self, win):
-        super().__init__(win)
-        self.answerList  = self.loadQuestion(audio_dir)
+class TestScreen(QWidget):
+    def __init__(self, screen_height, screen_width):
+        super().__init__()
+        self.screen_height = screen_height
+        self.screen_width = screen_width
+        self.resize(screen_width, screen_height)
+        self.setWindowTitle("Test Screen")
+        logging.info("Initializing TestScreen")
+        self.initUI()
+        self.answerList = self.loadQuestion(audio_dir)
         self.current_index = 0
-        # List of BofoMo consonants
-        self.playSoundButton = ButtonElement(win, "Play Sound", pos=(-0.4, 0.5), width=0.4, height=0.2, color="blue", action=self.play_sound)
-        self.previousButton  = ButtonElement(win, "Previous", pos=(0.55, -0.8), width=0.3, height=0.2, color="blue", action=self.previous_question)
-        self.nextButton      = ButtonElement(win, "Next", pos=(0.85, -0.8), width=0.2, height=0.2, color="blue", action=self.next_question)
-        self.submitButton    = ButtonElement(win, "Submit", pos=(0.7, -0.5), width=0.3, height=0.2, color="blue", action= self.submit_test)
-        self.progress        = TextElement(win, "Test Number:{}/{}".format(self.current_index+1,len(self.answerList)), pos=(0.7, 0.9),color=color_dict["black"])
-        self.bofomo_consonants_list  = ButtonList(
-                                            win=win,
-                                            textList=pofomopo_consonants,
-                                            pos=(-0.32, -0.45),  # Grid position
-                                            width=0.25,   # Button width
-                                            height=0.2,  # Button height
-                                            color="blue",  # Button color
-                                            action=self.bofomo_consonant_action,   # Action to perform when a button is clicked
-                                            rows=5,       # Number of rows
-                                            columns=5,    # Number of columns
-                                            horizontal_spacing=0.02,  # Horizontal spacing between buttons
-                                            vertical_spacing=0.02      # Vertical spacing between buttons
-                                        )
-        self.similarities_list  = ButtonList(
-                                            win=win,
-                                            textList=similarity_list,
-                                            pos=(0.8, 0.2),  # Grid position
-                                            width=0.1,   # Button width
-                                            height=0.15,  # Button height
-                                            color="blue",  # Button color
-                                            action=self.similarity_action,   # Action to perform when a button is clicked
-                                            rows=5,       # Number of rows
-                                            columns=1,    # Number of columns
-                                            horizontal_spacing=0.01,  # Horizontal spacing between buttons
-                                            vertical_spacing=0.01      # Vertical spacing between buttons
-                                        )
-        self.add_element(self.playSoundButton)
-        self.add_element(self.submitButton)
-        self.add_element(self.progress)
-        self.add_element(self.bofomo_consonants_list)
-        self.add_element(self.similarities_list)
+        self.updateProcess()
         self.update_button_states()
 
+        self.answerList  = self.loadQuestion(audio_dir)
+        self.current_index = 0
+
+    def initUI(self):
+        logging.info("Setting up UI for TestScreen")
         
-    def next_question(self, mouse):
+        layout = QVBoxLayout(self)
+
+        self.progress_label = QLabel("Test Number: 0/0")
+        layout.addWidget(self.progress_label)
+
+        self.playSoundButton = QPushButton("Play Sound")
+        self.playSoundButton.clicked.connect(self.play_sound)
+        layout.addWidget(self.playSoundButton)
+
+        self.progress_bar = QProgressBar(self)
+        
+        button_layout = QHBoxLayout()
+
+         # Spacer to push buttons to the right
+        spacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        button_layout.addItem(spacer)
+
+        # Previous Button
+        self.previousButton = QPushButton("Previous")
+        self.previousButton.clicked.connect(self.previous_question)
+        button_layout.addWidget(self.previousButton)
+
+        # Next Button
+        self.nextButton = QPushButton("Next")
+        self.nextButton.clicked.connect(self.next_question)
+        button_layout.addWidget(self.nextButton)
+
+        # Submit Button
+        submitButton = QPushButton("Submit")
+        submitButton.clicked.connect(self.handling_submit_button)
+        button_layout.addWidget(submitButton)
+
+        # Add the horizontal layout to the main layout
+
+        layout.addLayout(button_layout)
+        self.setLayout(layout)
+        self.setWindowTitle('TestScreen')
+
+        
+        # Create grid layout for bofomo consonants
+        self.bofomo_consonants_grid = QGridLayout()
+        for i, text in enumerate(pofomopo_consonants):
+            button = QPushButton(str(text), self)
+            button.clicked.connect(lambda checked, text=text: self.bofomo_consonant_action(text))
+            row, col = divmod(i, 5)
+            self.bofomo_consonants_grid.addWidget(button, row, col)
+        layout.addLayout(self.bofomo_consonants_grid)
+
+        # Create grid layout for similarities
+        self.similarities_grid = QGridLayout()
+        for i, text in enumerate(similarity_list):
+            button = QPushButton(str(text), self)
+            button.clicked.connect(lambda checked, text=text: self.similarity_action(text))
+            row, col = divmod(i, 1)
+            self.similarities_grid.addWidget(button, row, col)
+        layout.addLayout(self.similarities_grid)
+
+    def next_question(self):
         self.current_index += 1
         self.update_button_states()
         self.updateProcess()
-        return self
     
-    def previous_question(self, mouse):
+    def previous_question(self):
         self.current_index -= 1
         self.update_button_states()
         self.updateProcess()
-        return self
 
-    def play_sound(self, mouse):
+    def play_sound(self):
         current_question = self.answerList[self.current_index]
         play(current_question.get_question())
-        return self
         
 
     def loadQuestion(self, audio_dir):
@@ -145,67 +244,160 @@ class TestScreen(BaseScreen):
         return quetionList
     
     def update_button_states(self):
-        # Disable "Next" button when at the end
-        if self.current_index == len(self.answerList) - 1:
-            self.add_element(self.previousButton)
-            self.remove_element(self.nextButton)
-        elif  self.current_index == 0:
-            self.add_element(self.nextButton)
-            self.remove_element(self.previousButton)
-        else:
-            self.add_element(self.nextButton)
-            self.add_element(self.previousButton)
+
+        is_first_question = self.current_index == 0
+        is_last_question = self.current_index == len(self.answerList) - 1
+
+        self.previousButton.setVisible(not is_first_question)
+        self.nextButton.setVisible(not is_last_question)
         
         current_question = self.answerList[self.current_index]
-        self.bofomo_consonants_list.updateState(current_question.get_answer())
-        self.similarities_list.updateState(current_question.get_similarity())
 
-    def submit_test(self, mouse):
+    def handling_submit_button(self):
+        self.submit_test()
+        self.navigate_end_screen()
+
+    def submit_test(self):
         for  question in self.answerList:
             question.set_id(question.get_id()+1)
             question.set_answer(pofomopo_consonants[question.get_answer()] if question.get_answer()!= -1 else -1)
             question.set_similarity(similarity_list[question.get_similarity()] if question.get_similarity()!=-1 else -1)
-        return EndScreen(self.win,self.answerList)
+
+
+    def navigate_end_screen(self):
+        logging.info("Open the EndScreen")
+        self.next_screen = EndScreen(self.screen_height,self.screen_width,self.answerList)
+        self.next_screen.show()
+        self.close()
     
     def updateProcess(self):
-        self.progress.set_text("Test Number:{}/{}".format(self.current_index+1,len(self.answerList)))
+        # Update the progress label
+        self.progress_label.setText(f"Test Number: {self.current_index + 1}/{len(self.answerList)}")
+        
+        # Update the progress bar
+        if len(self.answerList) > 0:
+            progress_value = int((self.current_index + 1) / len(self.answerList) * 100)
+            self.progress_bar.setValue(progress_value)
+        else:
+            self.progress_bar.setValue(0)
+        # self.progress.set_text("Test Number:{}/{}".format(self.current_index+1,len(self.answerList)))
     
     # Action for BofoMo consonants
     def bofomo_consonant_action(self, button_index):
         current_question = self.answerList[self.current_index]
         current_question.set_answer(button_index)
-        self.bofomo_consonants_list.updateState(button_index)
-        return self
+        # self.bofomo_consonants_list.updateState(button_index)
 
     # Action for similarities
     def similarity_action(self, button_index):
         current_question = self.answerList[self.current_index]
         current_question.set_similarity(button_index)
-        self.similarities_list.updateState(button_index)
-        return self
+        # self.similarities_list.updateState(button_index)
 
 
-# Create the SettingScreen class with the Reset button and modal logic
-class SettingScreen(BaseScreen):
-    def __init__(self, win):
-        super().__init__(win)
-        self.add_element(TextElement(win, "Settings", pos=(0, 0), color=color_dict["black"]))
-        self.add_element(ButtonElement(win, "Reset", pos=(0, -0.2), width=0.3, height=0.2, color="red",action=self.show_confirmation_modal))
-        self.add_element(ButtonElement(win, "Back", pos=(0.7, -0.8), width=0.3, height=0.2, color="grey",action=self.navigate_main_screen))
-        self.confirmation_modal = ConfirmationModal(win, "Are you sure you want to reset?",confirm_action=self.confirm,cancel_action=self.cancel)
-        self.add_element(self.confirmation_modal)
+class SettingScreen(QWidget):
+    def __init__(self,screen_height,screen_width):
+        super().__init__()
+        logging.info("Initializing SettingScreen")
+        self.screen_height = screen_height
+        self.screen_width = screen_width
+        self.resize(screen_height,screen_width)
+        self.initUI()
 
-    def show_confirmation_modal(self, mouse):
-        self.confirmation_modal.visible = True
-        return self
+    def initUI(self):
+        logging.info("Setting up UI for SettingScreen")
+        layout = QVBoxLayout(self)
+
+        layout.addWidget(QLabel("Settings"))
+
+        reset_btn = QPushButton("Reset", self)
+        reset_btn.clicked.connect(self.show_confirm_dialog)
+        layout.addWidget(reset_btn)
+
+        back_btn = QPushButton("Back", self)
+        back_btn.clicked.connect(self.navigate_main_screen)
+        layout.addWidget(back_btn)
+
+        self.setLayout(layout)
+
+    def show_confirm_dialog(self):
+        dialog = ConfirmDialog(self)
+        result = dialog.exec()
+
+        if result == QDialog.DialogCode.Accepted:
+            print("Save confirmed")
+            self.confirm()
+        else:
+            print("Save cancelled")
+            self.cancel()
+
+    def confirm(self):
+        print("Reset confirmed")
+
+    def cancel(self):
+        print("Reset cancelled")
+
+    def navigate_main_screen(self):
+        logging.info("Open the user start screen")
+        self.next_screen = StartScreen(self.screen_height,self.screen_width)
+        self.next_screen.show()
+        self.close()
+
     
-    def confirm(self, mouse):
-        self.confirmation_modal.visible = False
-        dataHandaler.resetHistory()
-        return self
+class UserInformationScreen(QWidget):
+    def __init__(self,screen_height,screen_width):
+        super().__init__()
+        self.screen_height = screen_height
+        self.screen_width = screen_width
+        self.resize(screen_height,screen_width)
+        logging.info("Initializing UserInformationScreen")
+        self.initUI()
 
-    def cancel(self, mouse):
-        self.confirmation_modal.visible = False
-        return self
-    def navigate_main_screen(self,mouse):
-        return StartScreen(self.win)
+    def initUI(self):
+        logging.info("Setting up UI for StartScreen")
+        layout = QVBoxLayout()
+        # Labels and fields
+        self.fields = {
+            "中文姓名": QLineEdit(self),
+            "英文姓名": QLineEdit(self),
+            "性別": QLineEdit(self),
+            "出生年": QLineEdit(self),
+            "教育程度": QLineEdit(self),
+            "母語": QLineEdit(self),
+            "跟家人常說語言": QLineEdit(self),
+            "跟朋友常說語言": QLineEdit(self)
+        }
+
+        for label, edit in self.fields.items():
+            layout.addWidget(QLabel(label))
+            layout.addWidget(edit)
+
+        # Save button
+        save_btn = QPushButton('Save', self)
+        save_btn.setStyleSheet("font-size: 18px; background-color: green; color: white; padding: 10px; margin-top: 15px;")
+        save_btn.clicked.connect(self.show_confirm_dialog)
+        layout.addWidget(save_btn)
+
+        self.setLayout(layout)
+        self.setWindowTitle('User Information')
+
+    def save_data(self):
+        user_info = {label: edit.text() for label, edit in self.fields.items()}
+        print("User Info Saved:", user_info)
+    
+    def navigate_test_screen(self):
+        logging.info("Open the TestScreen")
+        self.test_screen = TestScreen(self.screen_height,self.screen_width)
+        self.test_screen.show()
+        self.close()
+
+    def show_confirm_dialog(self):
+        dialog = ConfirmDialog(self)
+        result = dialog.exec()
+
+        if result == QDialog.DialogCode.Accepted:
+            print("Save confirmed")
+            self.save_data()
+            self.navigate_test_screen()
+        else:
+            print("Save cancelled")
