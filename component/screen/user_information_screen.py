@@ -44,12 +44,6 @@ class UserInformationScreen(QWidget):
     def save_data(self):
         user_info = {label: edit.text() for label, edit in self.fields.items()}
         print("User Info Saved:", user_info)
-    
-    def navigate_test_screen(self):
-        logging.info("Open the TestScreen")
-        self.test_screen = TestScreen(self.screen_height,self.screen_width)
-        self.test_screen.show()
-        self.close()
 
     def show_confirm_dialog(self):
         dialog = ConfirmDialog(self)
@@ -58,7 +52,6 @@ class UserInformationScreen(QWidget):
         if result == QDialog.DialogCode.Accepted:
             print("Save confirmed")
             self.save_data()
-            # self.navigator
-            self.navigate_test_screen()
+            self.navigator.navigate_to_test_screen()
         else:
             print("Save cancelled")

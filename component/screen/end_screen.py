@@ -15,7 +15,8 @@ class EndScreen(QWidget,):
 
         self.result = result
         self.initUI()
-        self.saveResult(result)
+        if(result is not None):
+            self.saveResult(result)
 
     def initUI(self):
         layout = QVBoxLayout(self)

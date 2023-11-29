@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QDialog, QHBoxLayout, QLabel
+from PyQt6.QtWidgets import QPushButton, QDialog, QHBoxLayout
 
 class ConfirmDialog(QDialog):
     def __init__(self, parent=None):
@@ -21,7 +21,7 @@ class ConfirmDialog(QDialog):
         self.setLayout(layout)
 
     def confirm(self):
-        self.accept()  # Closes the dialog and returns QDialog.Accepted
+        self.accept()
 
     def cancel(self):
-        self.reject()  # Closes the dialog and returns QDialog.Rejected
+        self.reject()

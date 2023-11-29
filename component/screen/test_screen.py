@@ -8,6 +8,7 @@ import logging
 from pydub.playback import play
 from config.dir import audio_dir
 from config.constant import pofomopo_consonants,similarity_list
+from pydub import AudioSegment
 
 
 # TestScreen
@@ -129,7 +130,6 @@ class TestScreen(QWidget):
     def handling_submit_button(self):
         self.submit_test()
         self.navigator.navigate_to_end_screen()
-        self.navigate_end_screen()
 
     def submit_test(self):
         for  question in self.answerList:
