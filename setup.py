@@ -5,7 +5,7 @@ import sys
 
 # Define the list of files to include
 include_files = [('static', '')]  # ('source_path', 'destination_path')
-packages=['numpy','pyglet','psychopy']  
+packages=['numpy','pyglet']  
 includes= []
 
 base = None
