@@ -16,7 +16,6 @@ class UserInformationScreen(QWidget):
     def initUI(self)->None:
         logging.info("Setting up UI for StartScreen")
         layout = QVBoxLayout()
-        # Labels and fields
         self.fields = {
             "中文姓名": QLineEdit(self),
             "英文姓名": QLineEdit(self),
@@ -46,7 +45,7 @@ class UserInformationScreen(QWidget):
         print("User Info Saved:", user_info)
 
     def show_confirm_dialog(self):
-        dialog = ConfirmDialog(self)
+        dialog = ConfirmDialog("save the information?",self)
         result = dialog.exec()
 
         if result == QDialog.DialogCode.Accepted:

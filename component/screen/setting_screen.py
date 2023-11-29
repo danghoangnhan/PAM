@@ -75,10 +75,4 @@ class SettingScreen(QWidget):
     def cancel(self):
         print("Reset cancelled")
 
-    # def navigate_main_screen(self):
-    #     logging.info("Open the user start screen")
-    #     self.next_screen = StartScreen(self.screen_height,self.screen_width)
-    #     self.next_screen.show()
-    #     self.close()
-
     

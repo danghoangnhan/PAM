@@ -6,6 +6,8 @@ from storage.localStorage import dataHandaler
 import random
 from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout,QProgressBar,QSizePolicy,QHBoxLayout,QSpacerItem, QGridLayout
 from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import Qt,QSize
+from typing import List
 
 import logging
 from pydub.playback import play
@@ -21,17 +23,18 @@ class TestScreen(QWidget):
         self.navigator = navigator
         self.screen_height = screen_height
         self.screen_width = screen_width
-        self.resize(screen_width, screen_height)
+        self.resize(screen_height,screen_width)
+        self.keyboard_list:List[QPushButton] = []
+        self.similarities_list = []
         self.setWindowTitle("Test Screen")
         logging.info("Initializing TestScreen")
+        
         self.initUI()
-        self.answerList = self.loadQuestion(audio_dir)
-        self.current_index = 0
+        self.answerList:List[Answer] = self.loadQuestion(audio_dir)
+        self.current_index:int = 0
         self.updateProcess()
         self.update_button_states()
 
-        self.answerList  = self.loadQuestion(audio_dir)
-        self.current_index = 0
 
     def initUI(self):
         logging.info("Setting up UI for TestScreen")
@@ -41,42 +44,53 @@ class TestScreen(QWidget):
         #Grid 1: Audio and Progress
         grid1_layout = QHBoxLayout()
         grid1_1_layout = QVBoxLayout()
-        grid1_1_layout.setSpacing(0)
         self.progress_label = QLabel("Test Number: 0/0")
+        self.progress_label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         grid1_1_layout.addWidget(self.progress_label)
 
-        self.progress_bar = QProgressBar(self)
-        grid1_1_layout.addWidget(self.progress_bar)
+        # self.progress_bar = QProgressBar(self)
+        # grid1_1_layout.addWidget(self.progress_bar)
 
-
-        self.playSoundButton = QPushButton("Play Sound")
-
-        self.playSoundButton = SquareButton(QIcon(volume_icon), self)
+        self.playSoundButton = SquareButton(QIcon(volume_icon), "Play Sound",self)
         self.playSoundButton.clicked.connect(self.play_sound)
+        self.playSoundButton.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         grid1_layout.addWidget(self.playSoundButton)
+
+        
         grid1_layout.addLayout(grid1_1_layout)
-        
+        main_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum))
+
         main_layout.addLayout(grid1_layout)
-        
+
 
         grid2_layout = QHBoxLayout(self)        
         self.bofomo_consonants_grid = QGridLayout()
         self.bofomo_consonants_grid.setHorizontalSpacing(0)
         self.bofomo_consonants_grid.setVerticalSpacing(0)
+        button_size = QSize(80, 80)  # Adjust the size as needed
+
         for i, text in enumerate(pofomopo_consonants):
             button = QPushButton(str(text), self)
+            self.keyboard_list.append(button)
             button.clicked.connect(lambda checked, text=text: self.bofomo_consonant_action(text))
+            button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+            button.setMinimumSize(button_size)
             row, col = divmod(i, 5)
             self.bofomo_consonants_grid.addWidget(button, row, col)
         grid2_layout.addLayout(self.bofomo_consonants_grid)
 
-        # Create grid layout for similarities
         self.similarities_grid = QGridLayout()
+        button_size = QSize(80, 80)  # Adjust the size as needed
         for i, text in enumerate(similarity_list):
             button = QPushButton(str(text), self)
+            self.similarities_list.append(button)
             button.clicked.connect(lambda checked, text=text: self.similarity_action(text))
+            button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+            button.setMinimumSize(button_size)
             row, col = divmod(i, 1)
             self.similarities_grid.addWidget(button, row, col)
+        spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        grid2_layout.addItem(spacer)
 
         grid2_layout.addLayout(self.similarities_grid)
         main_layout.addLayout(grid2_layout)
@@ -101,13 +115,13 @@ class TestScreen(QWidget):
         grid3.addLayout(grid_3_1)
 
         # Add the horizontal layout to the main layout
+        main_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
 
         main_layout.addLayout(grid3)
+
+
         self.setLayout(main_layout)
         self.setWindowTitle('TestScreen')
-
-        
-
 
     def next_question(self):
         self.current_index += 1
@@ -120,11 +134,11 @@ class TestScreen(QWidget):
         self.updateProcess()
 
     def play_sound(self):
-        current_question = self.answerList[self.current_index]
+        current_question:Answer = self.answerList[self.current_index]
         play(current_question.get_question())
         
 
-    def loadQuestion(self, audio_dir):
+    def loadQuestion(self, audio_dir)->List[Answer]:
         question_df = dataHandaler.get_exam()
         quetionList = []
         for index, row in question_df.iterrows():
@@ -144,8 +158,21 @@ class TestScreen(QWidget):
         self.previousButton.setVisible(not is_first_question)
         self.nextButton.setVisible(not is_last_question)
         
-        current_question = self.answerList[self.current_index]
-
+        current_question:Answer = self.answerList[self.current_index]
+        for button in self.keyboard_list:
+            if button.text() == current_question.get_answer():
+                self.update_button_style(button)
+            else:
+                self.reset_button_style(button)
+        for button in self.similarities_list:
+            if button.text() == current_question.get_similarity():
+                self.update_button_style(button)
+            else:
+                self.reset_button_style(button)
+        
+        print(current_question.get_answer())
+        print(current_question.get_similarity())
+        
     def handling_submit_button(self):
         self.submit_test()
         self.navigator.navigate_to_end_screen()
@@ -162,11 +189,11 @@ class TestScreen(QWidget):
         self.progress_label.setText(f"Test Number: {self.current_index + 1}/{len(self.answerList)}")
         
         # Update the progress bar
-        if len(self.answerList) > 0:
-            progress_value = int((self.current_index + 1) / len(self.answerList) * 100)
-            self.progress_bar.setValue(progress_value)
-        else:
-            self.progress_bar.setValue(0)
+        # if len(self.answerList) > 0:
+        #     progress_value = int((self.current_index + 1) / len(self.answerList) * 100)
+        #     self.progress_bar.setValue(progress_value)
+        # else:
+        #     self.progress_bar.setValue(0)
         # self.progress.set_text("Test Number:{}/{}".format(self.current_index+1,len(self.answerList)))
     
     # Action for BofoMo consonants
@@ -180,3 +207,10 @@ class TestScreen(QWidget):
         current_question = self.answerList[self.current_index]
         current_question.set_similarity(button_index)
         # self.similarities_list.updateState(button_index)
+
+
+    def update_button_style(self, button):
+        button.setStyleSheet("background-color: #D3D3D3")
+
+    def reset_button_style(self, button):
+        button.setStyleSheet("")
