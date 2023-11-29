@@ -50,8 +50,7 @@ class TestScreen(QWidget):
         self.progress_label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         grid1_1_layout.addWidget(self.progress_label)
 
-        # self.progress_bar = QProgressBar(self)
-        # grid1_1_layout.addWidget(self.progress_bar)
+
 
         self.playSoundButton = SquareButton(QIcon(volume_icon), "Play Sound",self)
         self.playSoundButton.clicked.connect(self.play_sound)
@@ -71,7 +70,8 @@ class TestScreen(QWidget):
         self.bofomo_consonants_grid.setVerticalSpacing(0)
         button_size = QSize(80, 80)  # Adjust the size as needed
 
-        for i, text in enumerate(pofomopo_consonants):
+        keyboard_list = dataHandaler.getKeyboardList()
+        for i, text in enumerate(keyboard_list):
             button = QPushButton(str(text), self)
             self.keyboard_list.append(button)
             button.clicked.connect(lambda checked, text=text: self.bofomo_consonant_action(text))
@@ -82,7 +82,8 @@ class TestScreen(QWidget):
         grid2_layout.addLayout(self.bofomo_consonants_grid)
 
         self.similarities_grid = QGridLayout()
-        button_size = QSize(80, 80)  # Adjust the size as needed
+        button_size = QSize(80, 80)  
+        similarity_list = dataHandaler.getSimilarities()
         for i, text in enumerate(similarity_list):
             button = QPushButton(str(text), self)
             self.similarities_list.append(button)
@@ -228,3 +229,4 @@ class TestScreen(QWidget):
 
     def reset_button_style(self, button):
         button.setStyleSheet("")
+        

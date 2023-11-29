@@ -1,6 +1,6 @@
 import os
 from component.modal import ConfirmDialog
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout,QTextEdit,QTabWidget,QDialog,QSpinBox,QComboBox,QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout,QTextEdit,QTabWidget,QDialog,QSpinBox,QComboBox,QHBoxLayout,QMessageBox
 from PyQt6.QtGui import QFont
 from storage.localStorage import dataHandaler
 
@@ -42,10 +42,21 @@ class GeneralSettingTab(QWidget):
         reset_btn.clicked.connect(show_confirm_dialog_callback)
         main_layout.addWidget(reset_btn)
 
+        # Apply button
+        apply_btn = QPushButton("Apply", self)
+        apply_btn.setFont(QFont("Arial", 16))  # Adjust font size
+        apply_btn.clicked.connect(self.apply_settings)
+        main_layout.addWidget(apply_btn)
+
         self.setLayout(main_layout)
 
-
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTextEdit, QLabel
+    def apply_settings(self):
+        current_data = {
+            'selected_similarity' : self.similarities_spinbox.value(),
+            'selected_keyboard_layout' : self.filenames_combobox.currentText(),
+        }
+        dataHandaler.saveMetaData(current_data)
+        QMessageBox.information(self, "Settings Applied", "Settings have been applied and saved.")
 
 class AboutTab(QWidget):
     def __init__(self, version, developer, designer):

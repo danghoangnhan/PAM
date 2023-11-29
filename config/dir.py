@@ -15,3 +15,5 @@ exam_dir = os.path.join(csv_dir, "exam.xlsx")
 volume_icon = os.path.join(image_dir, "volume.png")
 keyboard_dir = os.path.join(csv_dir, "keyboard_layout")
 
+metadata_dir = os.path.join(static_dir, "metadata", "default.json")
+
