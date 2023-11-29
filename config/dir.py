@@ -13,3 +13,5 @@ user_dir = os.path.join(csv_dir, "user.xlsx")
 history_dir = os.path.join(csv_dir, "history.xlsx")
 exam_dir = os.path.join(csv_dir, "exam.xlsx")
 volume_icon = os.path.join(image_dir, "volume.png")
+keyboard_dir = os.path.join(csv_dir, "keyboard_layout")
+

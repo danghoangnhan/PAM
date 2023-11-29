@@ -4,9 +4,9 @@ import os
 from model.answer import Answer
 from storage.localStorage import dataHandaler
 import random
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout,QProgressBar,QSizePolicy,QHBoxLayout,QSpacerItem, QGridLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout,QSizePolicy,QHBoxLayout,QSpacerItem, QGridLayout
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import Qt,QSize
+from PyQt6.QtCore import QSize
 from typing import List
 
 import logging
@@ -166,14 +166,12 @@ class TestScreen(QWidget):
                 self.update_button_style(button)
             else:
                 self.reset_button_style(button)
+
         for button in self.similarities_list:
-            if button.text() == current_question.get_similarity():
+            if button.text() == str(current_question.get_similarity()):
                 self.update_button_style(button)
             else:
                 self.reset_button_style(button)
-        
-        print(current_question.get_answer())
-        print(current_question.get_similarity())
         
     def handling_submit_button(self):
         self.submit_test()
@@ -216,13 +214,13 @@ class TestScreen(QWidget):
     def bofomo_consonant_action(self, button_index):
         current_question = self.answerList[self.current_index]
         current_question.set_answer(button_index)
-        # self.bofomo_consonants_list.updateState(button_index)
+        self.update_button_states()
 
     # Action for similarities
     def similarity_action(self, button_index):
         current_question = self.answerList[self.current_index]
         current_question.set_similarity(button_index)
-        # self.similarities_list.updateState(button_index)
+        self.update_button_states()
 
 
     def update_button_style(self, button):

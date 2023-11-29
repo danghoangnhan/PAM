@@ -59,5 +59,6 @@ class DataHandaler:
     def resetHistory(self):
         self.user_data_handaler.truncate()
         self.history_data_handaler.truncate()
+        
 
 dataHandaler= DataHandaler()
