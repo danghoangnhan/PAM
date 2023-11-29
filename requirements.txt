@@ -2,11 +2,11 @@ altgraph==0.17.4
 arabic-reshaper==3.0.0
 astunparse==1.6.3
 beautifulsoup4==4.12.2
-blosc2==2.0.0
+blosc2
 certifi==2023.7.22
 cffi==1.15.1
 charset-normalizer==3.2.0
-contourpy==1.1.1
+contourpy
 cryptography==41.0.4
 cx-Freeze==6.15.6
 cx-Logging==3.1.0
@@ -18,10 +18,11 @@ esprima==4.0.1
 et-xmlfile==1.1.0
 ffprobe==0.5
 ffpyplayer==4.5.0
-fonttools==4.42.1
+fonttools
 freetype-py==2.4.0
 future==0.18.3
-gevent==23.9.1
+# gevent==23.9.1
+gevent
 gitdb==4.0.10
 GitPython==3.1.37
 greenlet==2.0.2
