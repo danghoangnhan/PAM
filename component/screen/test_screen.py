@@ -1,15 +1,18 @@
 
+from component.button import SquareButton
 from component.model import Answer
 import os
 from storage.localStorage import dataHandaler
 import random
 from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout,QProgressBar,QSizePolicy,QHBoxLayout,QSpacerItem, QGridLayout
+from PyQt6.QtGui import QIcon
+
 import logging
 from pydub.playback import play
 from config.dir import audio_dir
 from config.constant import pofomopo_consonants,similarity_list
 from pydub import AudioSegment
-
+from config.dir import volume_icon
 
 # TestScreen
 class TestScreen(QWidget):
@@ -33,53 +36,39 @@ class TestScreen(QWidget):
     def initUI(self):
         logging.info("Setting up UI for TestScreen")
         
-        layout = QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
+        #Grid 1: Audio and Progress
+        grid1_layout = QHBoxLayout()
+        grid1_1_layout = QVBoxLayout()
+        grid1_1_layout.setSpacing(0)
         self.progress_label = QLabel("Test Number: 0/0")
-        layout.addWidget(self.progress_label)
-
-        self.playSoundButton = QPushButton("Play Sound")
-        self.playSoundButton.clicked.connect(self.play_sound)
-        layout.addWidget(self.playSoundButton)
+        grid1_1_layout.addWidget(self.progress_label)
 
         self.progress_bar = QProgressBar(self)
+        grid1_1_layout.addWidget(self.progress_bar)
+
+
+        self.playSoundButton = QPushButton("Play Sound")
+
+        self.playSoundButton = SquareButton(QIcon(volume_icon), self)
+        self.playSoundButton.clicked.connect(self.play_sound)
+        grid1_layout.addWidget(self.playSoundButton)
+        grid1_layout.addLayout(grid1_1_layout)
         
-        button_layout = QHBoxLayout()
-
-         # Spacer to push buttons to the right
-        spacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-        button_layout.addItem(spacer)
-
-        # Previous Button
-        self.previousButton = QPushButton("Previous")
-        self.previousButton.clicked.connect(self.previous_question)
-        button_layout.addWidget(self.previousButton)
-
-        # Next Button
-        self.nextButton = QPushButton("Next")
-        self.nextButton.clicked.connect(self.next_question)
-        button_layout.addWidget(self.nextButton)
-
-        # Submit Button
-        submitButton = QPushButton("Submit")
-        submitButton.clicked.connect(self.handling_submit_button)
-        button_layout.addWidget(submitButton)
-
-        # Add the horizontal layout to the main layout
-
-        layout.addLayout(button_layout)
-        self.setLayout(layout)
-        self.setWindowTitle('TestScreen')
-
+        main_layout.addLayout(grid1_layout)
         
-        # Create grid layout for bofomo consonants
+
+        grid2_layout = QHBoxLayout(self)        
         self.bofomo_consonants_grid = QGridLayout()
+        self.bofomo_consonants_grid.setHorizontalSpacing(0)
+        self.bofomo_consonants_grid.setVerticalSpacing(0)
         for i, text in enumerate(pofomopo_consonants):
             button = QPushButton(str(text), self)
             button.clicked.connect(lambda checked, text=text: self.bofomo_consonant_action(text))
             row, col = divmod(i, 5)
             self.bofomo_consonants_grid.addWidget(button, row, col)
-        layout.addLayout(self.bofomo_consonants_grid)
+        grid2_layout.addLayout(self.bofomo_consonants_grid)
 
         # Create grid layout for similarities
         self.similarities_grid = QGridLayout()
@@ -88,7 +77,37 @@ class TestScreen(QWidget):
             button.clicked.connect(lambda checked, text=text: self.similarity_action(text))
             row, col = divmod(i, 1)
             self.similarities_grid.addWidget(button, row, col)
-        layout.addLayout(self.similarities_grid)
+
+        grid2_layout.addLayout(self.similarities_grid)
+        main_layout.addLayout(grid2_layout)
+
+        grid3 = QVBoxLayout()
+        grid_3_1 = QHBoxLayout()
+
+        # Previous Button
+        self.previousButton = QPushButton("Previous")
+        self.previousButton.clicked.connect(self.previous_question)
+        grid_3_1.addWidget(self.previousButton)
+
+        # Next Button
+        self.nextButton = QPushButton("Next")
+        self.nextButton.clicked.connect(self.next_question)
+        grid_3_1.addWidget(self.nextButton)
+
+        # Submit Button
+        submitButton = QPushButton("Submit")
+        submitButton.clicked.connect(self.handling_submit_button)
+        grid3.addWidget(submitButton)
+        grid3.addLayout(grid_3_1)
+
+        # Add the horizontal layout to the main layout
+
+        main_layout.addLayout(grid3)
+        self.setLayout(main_layout)
+        self.setWindowTitle('TestScreen')
+
+        
+
 
     def next_question(self):
         self.current_index += 1
