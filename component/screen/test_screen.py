@@ -1,7 +1,7 @@
 
 from component.button import SquareButton
-from component.model import Answer
 import os
+from model.answer import Answer
 from storage.localStorage import dataHandaler
 import random
 from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout,QProgressBar,QSizePolicy,QHBoxLayout,QSpacerItem, QGridLayout
@@ -15,6 +15,8 @@ from config.dir import audio_dir
 from config.constant import pofomopo_consonants,similarity_list
 from pydub import AudioSegment
 from config.dir import volume_icon
+import pandas as pd
+from model.session import currentSession
 
 # TestScreen
 class TestScreen(QWidget):
@@ -183,7 +185,21 @@ class TestScreen(QWidget):
             question.set_answer(pofomopo_consonants[question.get_answer()] if question.get_answer()!= -1 else -1)
             question.set_similarity(similarity_list[question.get_similarity()] if question.get_similarity()!=-1 else -1)
 
-    
+        new_user_value = currentSession.get_user_info()
+        new_user_value["participantID"]=dataHandaler.get_new_sessionId()
+
+        new_history_value = pd.DataFrame([element.to_dict() for element in self.answerList])
+        new_history_value['participate_number'] = dataHandaler.get_new_sessionId()
+        new_history_value = new_history_value.sort_values(by='question')
+        
+        
+        dataHandaler.append_history_data(new_history_value)
+        print(new_user_value)
+        dataHandaler.append_user_data(pd.DataFrame([new_user_value]))
+
+    def submit_session(self):
+        pass
+
     def updateProcess(self):
         # Update the progress label
         self.progress_label.setText(f"Test Number: {self.current_index + 1}/{len(self.answerList)}")

@@ -1,8 +1,4 @@
-from PyQt6.QtWidgets import QPushButton,QApplication,QPushButton, QLabel, QVBoxLayout, QApplication
-from PyQt6.QtCore import QSize,Qt
-from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import QSize
-
+from PyQt6.QtWidgets import QPushButton,QPushButton, QLabel, QVBoxLayout
 
 class SquareButton(QPushButton):
     def __init__(self, icon, text, parent=None):
@@ -18,10 +14,3 @@ class SquareButton(QPushButton):
         layout.addWidget(self.icon_label)
         layout.addWidget(self.text_label)
         self.setLayout(layout)
-
-    # def sizeHint(self):
-    #     screen = QApplication.screens()[0]
-    #     screen_size = screen.availableGeometry()
-    #     # Calculate the button size based on screen size
-    #     button_size = screen_size.width() / 10
-    #     return QSize(button_size, button_size)

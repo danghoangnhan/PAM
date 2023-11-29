@@ -29,6 +29,7 @@ class xlsxHandler:
 
 class DataHandaler:
     def __init__(self):
+
         self.user_data_handaler =xlsxHandler(dir=user_dir)
         self.history_data_handaler =xlsxHandler(dir=history_dir)
         self.exam_data_handler = xlsxHandler(dir=exam_dir)
