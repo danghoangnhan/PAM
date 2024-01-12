@@ -180,9 +180,10 @@ class TestScreen(QWidget):
 
     def submit_test(self):
         for  question in self.answerList:
+            print(question.get_answer())
             question.set_id(question.get_id()+1)
-            question.set_answer(pofomopo_consonants[question.get_answer()] if question.get_answer()!= -1 else -1)
-            question.set_similarity(similarity_list[question.get_similarity()] if question.get_similarity()!=-1 else -1)
+            question.set_answer(question.get_answer() if question.get_answer()!= -1 else -1)
+            question.set_similarity(question.get_similarity() if question.get_similarity()!=-1 else -1)
 
         new_user_value = currentSession.get_user_info()
         new_user_value["participantID"]=dataHandaler.get_new_sessionId()
